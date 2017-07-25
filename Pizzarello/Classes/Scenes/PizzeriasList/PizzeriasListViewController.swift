@@ -16,12 +16,20 @@ protocol PizzeriasListDisplayLogic: class
 {
     func displayErrorMessage(errorMessage: String)
     func displayFetchedPizzerias(viewModel: PizzeriasList.FetchPizzerias.ViewModel)
+    func allPizzeriasDidReceived()
 }
 
 class PizzeriasListViewController: UITableViewController, PizzeriasListDisplayLogic
 {
+    struct SegueIdentieirs
+    {
+        private init() {}
+        
+        internal static let showPizzeriaDetails = "ShowPizzeriaDetails"
+    }
+    
     var interactor: PizzeriasListBusinessLogic?
-    var router: (NSObjectProtocol & PizzeriasListRoutingLogic & PizzeriasListDataPassing)?
+    var router: (NSObjectProtocol & PizzeriasListRoutingLogic)?
     var displayedPizzerias: [PizzeriasList.FetchPizzerias.ViewModel.DisplayedPizzerias] = []
     
     // MARK: Object lifecycle
@@ -56,7 +64,8 @@ class PizzeriasListViewController: UITableViewController, PizzeriasListDisplayLo
     
     // MARK: Routing
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    override func prepare(for segue: UIStoryboardSegue,
+                          sender: Any?)
     {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
@@ -71,7 +80,8 @@ class PizzeriasListViewController: UITableViewController, PizzeriasListDisplayLo
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        registerTableViewCells()
+        registerTableViewComponents()
+        configureSpinnerFooterView()
         fetchPizzeriasOnLoad()
     }
 
@@ -92,6 +102,26 @@ class PizzeriasListViewController: UITableViewController, PizzeriasListDisplayLo
         return cell
     }
     
+    override func tableView(_ tableView: UITableView,
+                            willDisplay cell: UITableViewCell,
+                            forRowAt indexPath: IndexPath)
+    {
+        let isLastRow: Bool = (indexPath.row == (displayedPizzerias.endIndex - 1))
+        
+        if isLastRow {
+            interactor?.requestNextChunkPizzerias()
+        }
+    }
+    
+    //MARK: - UITableViewDelegate
+    
+    override func tableView(_ tableView: UITableView,
+                            didSelectRowAt indexPath: IndexPath)
+    {
+        performSegue(withIdentifier: SegueIdentieirs.showPizzeriaDetails,
+                     sender: nil)
+    }
+    
     //MARK: - ContactsListDisplayLogic
     
     func displayFetchedPizzerias(viewModel: PizzeriasList.FetchPizzerias.ViewModel)
@@ -100,16 +130,26 @@ class PizzeriasListViewController: UITableViewController, PizzeriasListDisplayLo
         tableView.reloadData()
     }
     
+    func allPizzeriasDidReceived()
+    {
+        tableView.tableFooterView = nil
+    }
     
     //MARK: - Helpers
-    private func registerTableViewCells()
+    private func registerTableViewComponents()
     {
         tableView.registerReusableCell(PizzeriasListCell.self)
     }
     
+    private func configureSpinnerFooterView()
+    {
+        tableView.tableFooterView = Bundle.main.loadNibNamed("PizzeriaListSpinnerFooterView",
+                                                             owner: nil,
+                                                             options: nil)?.first! as? UIView
+    }
+    
     private func fetchPizzeriasOnLoad()
     {
-        interactor?.fetchPizzerias()
-        interactor?.requestNextPizzerias()
+        interactor?.fetchPizzeriasOnLoad()
     }
 }

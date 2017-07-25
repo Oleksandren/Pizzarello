@@ -58,10 +58,7 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         
-        
-        
         super.init()
-        
         frc.delegate = self
     }
     
@@ -94,8 +91,7 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
     {
         privateManagedObjectContext.perform {
             do {
-                let fetchRequest = NSFetchRequest<ManagedPizzeria>(entityName: "ManagedPizzeria")
-                fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+                let fetchRequest = self.fetchRequest(pizzeriaID: id)
                 let results = try self.privateManagedObjectContext.fetch(fetchRequest)
                 if let pizzeria = results.first?.toPizzeria() {
                     completionHandler(PizzeriasStoreResult.success(result: pizzeria))
@@ -108,23 +104,6 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
         }
     }
     
-    func createPizzeria(pizzeriaToCreate: Pizzeria, completionHandler: @escaping PizzeriasStoreCreatePizzeriaCompletionHandler)
-    {
-        privateManagedObjectContext.perform {
-            do {
-                let managedPizzeria = NSEntityDescription.insertNewObject(forEntityName: "ManagedPizzeria", into: self.privateManagedObjectContext) as! ManagedPizzeria
-                let pizzeria = pizzeriaToCreate
-                managedPizzeria.fromPizzeria(pizzeria: pizzeria)
-                try self.privateManagedObjectContext.save()
-                try self.mainManagedObjectContext.save()
-                completionHandler(PizzeriasStoreResult.success(result: pizzeria))
-            } catch {
-                let error = PizzeriasStoreError.cannotCreate("Cannot create pizzeria with id \(String(describing: pizzeriaToCreate.id))")
-                completionHandler(PizzeriasStoreResult.failure(error: error))
-            }
-        }
-    }
-    
     func createPizzerias(pizzeriasToCreate: [Pizzeria],
                          completionHandler: @escaping PizzeriasStoreCreatePizzeriasCompletionHandler)
     {
@@ -133,12 +112,21 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
                 var createdPizzeras: [Pizzeria] = []
                 
                 for pizzeriaToCreate in pizzeriasToCreate {
-                    let managedPizzeria = NSEntityDescription.insertNewObject(forEntityName: "ManagedPizzeria",
+                    var managedPizzeria: ManagedPizzeria
+                    
+                    let fetchRequest = self.fetchRequest(pizzeriaID: pizzeriaToCreate.id)
+                    let results = try self.privateManagedObjectContext.fetch(fetchRequest)
+                    if results.first != nil {
+                        managedPizzeria = results.first!
+                    }
+                    else {
+                        managedPizzeria = NSEntityDescription.insertNewObject(forEntityName: "ManagedPizzeria",
                                                                               into: self.privateManagedObjectContext) as! ManagedPizzeria
+                    }
+                    
                     let pizzeria = pizzeriaToCreate
                     managedPizzeria.fromPizzeria(pizzeria: pizzeriaToCreate)
                     createdPizzeras.append(pizzeria)
-                    
                 }
                 
                 try self.privateManagedObjectContext.save()
@@ -156,9 +144,8 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
     {
         privateManagedObjectContext.perform {
             do {
-                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ManagedPizzeria")
-                fetchRequest.predicate = NSPredicate(format: "id == %@", pizzeriaToUpdate.id)
-                let results = try self.privateManagedObjectContext.fetch(fetchRequest) as! [ManagedPizzeria]
+                let fetchRequest = self.fetchRequest(pizzeriaID: pizzeriaToUpdate.id)
+                let results = try self.privateManagedObjectContext.fetch(fetchRequest)
                 if let managedPizzeria = results.first {
                     do {
                         managedPizzeria.fromPizzeria(pizzeria: pizzeriaToUpdate)
@@ -180,9 +167,8 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
     {
         privateManagedObjectContext.perform {
             do {
-                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ManagedPizzeria")
-                fetchRequest.predicate = NSPredicate(format: "id == %@", id)
-                let results = try self.privateManagedObjectContext.fetch(fetchRequest) as! [ManagedPizzeria]
+                let fetchRequest = self.fetchRequest(pizzeriaID: id)
+                let results = try self.privateManagedObjectContext.fetch(fetchRequest)
                 if let managedPizzeria = results.first {
                     let pizzeria = managedPizzeria.toPizzeria()
                     self.privateManagedObjectContext.delete(managedPizzeria)
@@ -220,6 +206,15 @@ class PizzeriasCoreDataStore: NSObject, PizzeriasStoreProtocol
     }
     
     
+    //MARK: - Helpers
+    
+    private func fetchRequest(pizzeriaID: String) -> NSFetchRequest<ManagedPizzeria>
+    {
+        let fetchRequest = NSFetchRequest<ManagedPizzeria>(entityName: "ManagedPizzeria")
+        fetchRequest.predicate = NSPredicate(format: "id == %@", pizzeriaID)
+        
+        return fetchRequest
+    }
 }
 
 extension PizzeriasCoreDataStore: NSFetchedResultsControllerDelegate

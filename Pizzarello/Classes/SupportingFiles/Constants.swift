@@ -14,5 +14,6 @@ struct Constants
     {
         internal static let ok = "OK"
         internal static let error = "Error"
+        internal static let locationUndefined = "Current location is undefined, will be used default value"
     }
 }

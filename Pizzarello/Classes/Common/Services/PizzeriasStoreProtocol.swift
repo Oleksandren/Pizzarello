@@ -15,7 +15,6 @@ protocol PizzeriasStoreProtocol
     func fetchPizzerias(completionHandler: @escaping PizzeriasStoreFetchPizzeriasCompletionHandler)
     func fetchPizzeria(id: String, completionHandler: @escaping PizzeriasStoreFetchPizzeriaCompletionHandler)
     func createPizzerias(pizzeriasToCreate: [Pizzeria], completionHandler: @escaping PizzeriasStoreCreatePizzeriasCompletionHandler)
-    func createPizzeria(pizzeriaToCreate: Pizzeria, completionHandler: @escaping PizzeriasStoreCreatePizzeriaCompletionHandler)
     func updatePizzeria(pizzeriaToUpdate: Pizzeria, completionHandler: @escaping PizzeriasStoreUpdatePizzeriaCompletionHandler)
     func deletePizzeria(id: String, completionHandler: @escaping PizzeriasStoreDeletePizzeriaCompletionHandler)
     
@@ -30,7 +29,6 @@ protocol PizzeriasStoreProtocol
 typealias PizzeriasStoreFetchPizzeriasCompletionHandler = (PizzeriasStoreResult<[Pizzeria]>) -> Void
 typealias PizzeriasStoreFetchPizzeriaCompletionHandler = (PizzeriasStoreResult<Pizzeria>) -> Void
 typealias PizzeriasStoreCreatePizzeriasCompletionHandler = (PizzeriasStoreResult<[Pizzeria]>) -> Void
-typealias PizzeriasStoreCreatePizzeriaCompletionHandler = (PizzeriasStoreResult<Pizzeria>) -> Void
 typealias PizzeriasStoreUpdatePizzeriaCompletionHandler = (PizzeriasStoreResult<Pizzeria>) -> Void
 typealias PizzeriasStoreDeletePizzeriaCompletionHandler = (PizzeriasStoreResult<Pizzeria>) -> Void
 

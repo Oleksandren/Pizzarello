@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D66BF431F2759DE009AEFAC /* PizzeriaListSpinnerFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D66BF421F2759DE009AEFAC /* PizzeriaListSpinnerFooterView.xib */; };
+		1D66BF451F27A4A3009AEFAC /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF441F27A4A3009AEFAC /* LocationManager.swift */; };
+		1D66BF4D1F27AA1E009AEFAC /* PizzeriaDetailsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF471F27AA1E009AEFAC /* PizzeriaDetailsInteractor.swift */; };
+		1D66BF4E1F27AA1E009AEFAC /* PizzeriaDetailsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF481F27AA1E009AEFAC /* PizzeriaDetailsModels.swift */; };
+		1D66BF4F1F27AA1E009AEFAC /* PizzeriaDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF491F27AA1E009AEFAC /* PizzeriaDetailsPresenter.swift */; };
+		1D66BF511F27AA1E009AEFAC /* PizzeriaDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF4B1F27AA1E009AEFAC /* PizzeriaDetailsViewController.swift */; };
+		1D66BF541F27B399009AEFAC /* PizzeriaDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF531F27B399009AEFAC /* PizzeriaDetailsCell.swift */; };
+		1D66BF561F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF551F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift */; };
+		1D66BF591F27CE21009AEFAC /* centerOfNY.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 1D66BF581F27CE21009AEFAC /* centerOfNY.gpx */; };
 		1DBA928D1F25DA3C00F561C2 /* Pizzeria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA928C1F25DA3C00F561C2 /* Pizzeria.swift */; };
 		1DBA92911F25DB6500F561C2 /* ManagedPizzeria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA92901F25DB6500F561C2 /* ManagedPizzeria.swift */; };
 		1DBA92931F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA92921F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift */; };
@@ -33,6 +42,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D66BF421F2759DE009AEFAC /* PizzeriaListSpinnerFooterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PizzeriaListSpinnerFooterView.xib; sourceTree = "<group>"; };
+		1D66BF441F27A4A3009AEFAC /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		1D66BF471F27AA1E009AEFAC /* PizzeriaDetailsInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsInteractor.swift; sourceTree = "<group>"; };
+		1D66BF481F27AA1E009AEFAC /* PizzeriaDetailsModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsModels.swift; sourceTree = "<group>"; };
+		1D66BF491F27AA1E009AEFAC /* PizzeriaDetailsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsPresenter.swift; sourceTree = "<group>"; };
+		1D66BF4B1F27AA1E009AEFAC /* PizzeriaDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsViewController.swift; sourceTree = "<group>"; };
+		1D66BF531F27B399009AEFAC /* PizzeriaDetailsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsCell.swift; sourceTree = "<group>"; };
+		1D66BF551F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsRouter.swift; sourceTree = "<group>"; };
+		1D66BF581F27CE21009AEFAC /* centerOfNY.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = centerOfNY.gpx; sourceTree = "<group>"; };
 		1DBA928C1F25DA3C00F561C2 /* Pizzeria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pizzeria.swift; sourceTree = "<group>"; };
 		1DBA92901F25DB6500F561C2 /* ManagedPizzeria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedPizzeria.swift; sourceTree = "<group>"; };
 		1DBA92921F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ManagedPizzerias+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -74,6 +92,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D66BF461F27AA0C009AEFAC /* PizzeriaDetails */ = {
+			isa = PBXGroup;
+			children = (
+				1D66BF471F27AA1E009AEFAC /* PizzeriaDetailsInteractor.swift */,
+				1D66BF481F27AA1E009AEFAC /* PizzeriaDetailsModels.swift */,
+				1D66BF491F27AA1E009AEFAC /* PizzeriaDetailsPresenter.swift */,
+				1D66BF551F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift */,
+				1D66BF4B1F27AA1E009AEFAC /* PizzeriaDetailsViewController.swift */,
+				1D66BF531F27B399009AEFAC /* PizzeriaDetailsCell.swift */,
+			);
+			path = PizzeriaDetails;
+			sourceTree = "<group>";
+		};
+		1D66BF571F27CDF2009AEFAC /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				1D66BF581F27CE21009AEFAC /* centerOfNY.gpx */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		1DF41D4E1F2464C700F74C9A = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +185,7 @@
 				1DBA92981F26102200F561C2 /* PizzeriasStoreProtocol.swift */,
 				1DBA92941F260A0300F561C2 /* PizzeriasCoreDataStore.swift */,
 				1DBA92A21F2639B400F561C2 /* PizzeriasNetworkProvider.swift */,
+				1D66BF441F27A4A3009AEFAC /* LocationManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -154,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				1DF41D881F24914700F74C9A /* PizzeriasList */,
+				1D66BF461F27AA0C009AEFAC /* PizzeriaDetails */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -169,6 +210,7 @@
 		1DF41D771F24653700F74C9A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1D66BF571F27CDF2009AEFAC /* Other */,
 				1DF41D781F24653700F74C9A /* Assets.xcassets */,
 				1DF41D791F24653700F74C9A /* Interfaces */,
 				1DF41D7E1F24653700F74C9A /* Pizzarello.xcdatamodeld */,
@@ -183,6 +225,7 @@
 				1DF41D7A1F24653700F74C9A /* LaunchScreen.storyboard */,
 				1DF41D7C1F24653700F74C9A /* Main.storyboard */,
 				1DF41D991F253E6C00F74C9A /* PizzeriasListCell.xib */,
+				1D66BF421F2759DE009AEFAC /* PizzeriaListSpinnerFooterView.xib */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
@@ -305,7 +348,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D66BF431F2759DE009AEFAC /* PizzeriaListSpinnerFooterView.xib in Resources */,
 				1DF41D851F24653700F74C9A /* Main.storyboard in Resources */,
+				1D66BF591F27CE21009AEFAC /* centerOfNY.gpx in Resources */,
 				1DF41D9B1F253E6C00F74C9A /* PizzeriasListCell.xib in Resources */,
 				1DF41D831F24653700F74C9A /* Assets.xcassets in Resources */,
 				1DF41D841F24653700F74C9A /* LaunchScreen.storyboard in Resources */,
@@ -378,13 +423,20 @@
 				1DBA92931F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift in Sources */,
 				1DBA929F1F2619B900F561C2 /* Constants.swift in Sources */,
 				1DF41D911F2491CF00F74C9A /* PizzeriasListPresenter.swift in Sources */,
+				1D66BF4E1F27AA1E009AEFAC /* PizzeriaDetailsModels.swift in Sources */,
 				1DBA92911F25DB6500F561C2 /* ManagedPizzeria.swift in Sources */,
 				1DF41D901F2491CF00F74C9A /* PizzeriasListModels.swift in Sources */,
 				1DBA92951F260A0300F561C2 /* PizzeriasCoreDataStore.swift in Sources */,
+				1D66BF4F1F27AA1E009AEFAC /* PizzeriaDetailsPresenter.swift in Sources */,
+				1D66BF541F27B399009AEFAC /* PizzeriaDetailsCell.swift in Sources */,
+				1D66BF511F27AA1E009AEFAC /* PizzeriaDetailsViewController.swift in Sources */,
 				1DBA929D1F26198300F561C2 /* UIViewController+Utilities.swift in Sources */,
 				1DF41D861F24653700F74C9A /* Pizzarello.xcdatamodeld in Sources */,
 				1DF41D8F1F2491CF00F74C9A /* PizzeriasListInteractor.swift in Sources */,
+				1D66BF4D1F27AA1E009AEFAC /* PizzeriaDetailsInteractor.swift in Sources */,
+				1D66BF451F27A4A3009AEFAC /* LocationManager.swift in Sources */,
 				1DBA928D1F25DA3C00F561C2 /* Pizzeria.swift in Sources */,
+				1D66BF561F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

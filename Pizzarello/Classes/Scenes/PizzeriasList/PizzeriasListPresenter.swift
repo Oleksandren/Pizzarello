@@ -15,6 +15,8 @@ import UIKit
 protocol PizzeriasListPresentationLogic
 {
     func presentFetchedPizzerias(response: PizzeriasList.FetchPizzerias.Response)
+    func allPizzeriasDidReceived()
+    func displayErrorMessage(errorMessage: String)
 }
 
 class PizzeriasListPresenter: PizzeriasListPresentationLogic
@@ -45,5 +47,15 @@ class PizzeriasListPresenter: PizzeriasListPresentationLogic
                 self.viewController?.displayErrorMessage(errorMessage: errorMessage)
             }
         }
+    }
+    
+    func allPizzeriasDidReceived()
+    {
+        viewController?.allPizzeriasDidReceived()
+    }
+    
+    func displayErrorMessage(errorMessage: String)
+    {
+        viewController?.displayErrorMessage(errorMessage: errorMessage)
     }
 }

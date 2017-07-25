@@ -14,16 +14,28 @@ import UIKit
 
 @objc protocol PizzeriasListRoutingLogic
 {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func routeToShowPizzeriaDetails(segue: UIStoryboardSegue)
 }
 
-protocol PizzeriasListDataPassing
-{
-    var dataStore: PizzeriasListDataStore? { get }
-}
-
-class PizzeriasListRouter: NSObject, PizzeriasListRoutingLogic, PizzeriasListDataPassing
+class PizzeriasListRouter: NSObject, PizzeriasListRoutingLogic
 {
     weak var viewController: PizzeriasListViewController?
     var dataStore: PizzeriasListDataStore?
+    
+    //MARK: - PizzeriasListRoutingLogic
+    
+    func routeToShowPizzeriaDetails(segue: UIStoryboardSegue)
+    {
+        let destinationVC = segue.destination as! PizzeriaDetailsViewController
+        var destinationDS = destinationVC.router!.dataStore!
+        passDataToPizzeriaDetails(source: dataStore!, destination: &destinationDS)
+    }
+    
+    //MARK: - Passing data
+    
+    func passDataToPizzeriaDetails(source: PizzeriasListDataStore, destination: inout PizzeriaDetailsDataStore)
+    {
+        let selectedRow = viewController?.tableView.indexPathForSelectedRow?.row
+        destination.pizzeria = source.pizzerias[selectedRow!]
+    }
 }

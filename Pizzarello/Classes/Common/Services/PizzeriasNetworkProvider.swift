@@ -10,6 +10,7 @@ import Foundation
 import AFNetworking
 import SwiftyJSON
 import ObjectMapper
+import CoreLocation
 
 class PizzeriasNetworkProvider
 {
@@ -17,12 +18,12 @@ class PizzeriasNetworkProvider
     {
         private init() {}
         
-        internal static let urlString = "https://api.foursquare.com/v2/venues/search"
-        internal static let location = "40.7,-74"
+        internal static let urlString = "https://api.foursquare.com/v2/venues/explore"
         internal static let clientId = "Z41AFEJHN1MBGJYFBL0OGH4PWEZWSLV4MJZMHDR5KDYEWNAJ"
         internal static let clientSecret = "YLSEZM2JFSKHOCSCUGVQCUGQFQYB0CRW54LMGG42UKKQJPO0"
         internal static let version = "20170720"
         internal static let limit = "10"
+        internal static let categoryIdPizza = "4bf58dd8d48988d1ca941735"
     }
     
     struct Keys
@@ -39,6 +40,7 @@ class PizzeriasNetworkProvider
             internal static let version = "v"
             internal static let offset = "offset"
             internal static let limit = "limit"
+            internal static let categoryId = "categoryId"
         }
         
         struct Response
@@ -46,7 +48,9 @@ class PizzeriasNetworkProvider
             private init() {}
             
             internal static let response = "response"
-            internal static let venues = "venues"
+            internal static let groups = "groups"
+            internal static let items = "items"
+            internal static let venue = "venue"
         }
     }
     
@@ -55,23 +59,33 @@ class PizzeriasNetworkProvider
     
     //MARK: - 
     
-    func fetchPizzerias(completionHandler: @escaping (PizzeriasResponse<[Pizzeria]>) -> Void)
+    func fetchChunkPizzerias(location: CLLocationCoordinate2D,
+                             withOffset offset: Int,
+                             completionHandler: @escaping (PizzeriasResponse<[Pizzeria]>) -> Void)
     {
-        let parameters = [Keys.Request.location: Parameters.location,
+        let locationParam = "\(location.latitude),\(location.longitude)"
+        
+        let parameters = [Keys.Request.location: locationParam,
                           Keys.Request.clientId: Parameters.clientId,
                           Keys.Request.clientSecret: Parameters.clientSecret,
                           Keys.Request.version: Parameters.version,
-                          Keys.Request.limit: Parameters.limit]
+                          Keys.Request.categoryId: Parameters.categoryIdPizza,
+                          Keys.Request.limit: Parameters.limit,
+                          Keys.Request.offset: String(offset)]
         
         manager.get(Parameters.urlString,
                     parameters: parameters,
                     progress: nil,
                     success: { (task, response) in
-                        let responseJSON = JSON(response!)
-                        let venuesJSON = responseJSON[Keys.Response.response][Keys.Response.venues].arrayObject
-                        guard let pizzerias = Mapper<Pizzeria>().mapArray(JSONObject: venuesJSON) else
-                        {
-                            fatalError()
+                        let responseJSON = JSON(response!)[Keys.Response.response]
+                        let groupsJSON = responseJSON[Keys.Response.groups].arrayValue
+                        let itemsJSON = groupsJSON[0][Keys.Response.items].arrayValue
+                        
+                        let pizzerias = itemsJSON.flatMap { itemJSON -> Pizzeria? in
+                            let venueJSON = itemJSON[Keys.Response.venue].object
+                            let pizzeria = Mapper<Pizzeria>().map(JSONObject: venueJSON)
+                            
+                            return pizzeria
                         }
                         
                         completionHandler(PizzeriasResponse.success(result: pizzerias))

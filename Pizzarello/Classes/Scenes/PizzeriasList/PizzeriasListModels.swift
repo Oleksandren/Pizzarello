@@ -18,9 +18,6 @@ enum PizzeriasList
     
     enum FetchPizzerias
     {
-        struct Request
-        {
-        }
         struct Response
         {
             var result: PizzeriasResponse<[Pizzeria]>

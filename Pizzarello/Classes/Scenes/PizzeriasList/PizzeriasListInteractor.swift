@@ -11,31 +11,43 @@
 //
 
 import UIKit
+import CoreLocation
 
 protocol PizzeriasListBusinessLogic
 {
-    func fetchPizzerias()
-    func requestNextPizzerias()
+    func fetchPizzeriasOnLoad()
+    func requestNextChunkPizzerias()
 }
 
 protocol PizzeriasListDataStore
 {
-    var pizzerias: [Pizzeria]? { get }
+    var pizzerias: [Pizzeria] { get }
 }
 
 class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStore
 {
     var presenter: PizzeriasListPresentationLogic?
-    var pizzerias: [Pizzeria]? {
+    var pizzerias: [Pizzeria] = [] {
         didSet {
             pizzeriasListDidUpdated()
         }
     }
     private var store = PizzeriasCoreDataStore()
     private var networkProvider = PizzeriasNetworkProvider()
-    private var requestNextPizzeriasInProcess: Bool = false
+    private var requestNextChunkPizzeriasInProcess = false
+    private var allPizzeriasDidReceived = false {
+        didSet { if allPizzeriasDidReceived { presenter?.allPizzeriasDidReceived() } }
+    }
+    private var location: CLLocationCoordinate2D?
+    private let locationDefault = CLLocationCoordinate2D(latitude: 40.89498884760200,
+                                                         longitude: -73.9933415680849)
     
     init() {
+        location = LocationManager.shared.location
+        LocationManager.shared.locationDidUpdated = { location in
+            self.location = location
+        }
+        
         store.fetchedPizeriasDidChanged = { pizzerias in
             self.pizzerias = pizzerias
         }
@@ -43,21 +55,35 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
     
     // MARK: - PizzeriasListBusinessLogic
     
-    func requestNextPizzerias()
+    func requestNextChunkPizzerias()
     {
-        networkProvider.fetchPizzerias { result in
+        guard !allPizzeriasDidReceived
+            && !requestNextChunkPizzeriasInProcess else
+        { return }
+        requestNextChunkPizzeriasInProcess = true
+        
+        networkProvider.fetchChunkPizzerias(location: getLocation(),
+                                            withOffset: pizzerias.count) { result in
+            self.requestNextChunkPizzeriasInProcess = false
+            
             switch result {
             case .failure(errorMessage: let errorMessage):
                 let response = PizzeriasList.FetchPizzerias.Response(result: PizzeriasResponse.failure(errorMessage: errorMessage))
                 self.presenter?.presentFetchedPizzerias(response: response)
                 
             case .success(result: let pizzerias):
-            self.store.createPizzerias(pizzeriasToCreate: pizzerias, completionHandler: { _ in })
+                if pizzerias.isEmpty {
+                    self.allPizzeriasDidReceived = true
+                }
+                else {
+                    self.store.createPizzerias(pizzeriasToCreate: pizzerias,
+                                               completionHandler: { _ in })
+                }
             }
         }
     }
     
-    func fetchPizzerias()
+    func fetchPizzeriasOnLoad()
     {
         store.fetchPizzeriasWithChangesObserving { result in
             switch result {
@@ -68,6 +94,8 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
                 let response = PizzeriasList.FetchPizzerias.Response(result: PizzeriasResponse.failure(errorMessage: storeError.localizedDescription))
                 self.presenter?.presentFetchedPizzerias(response: response)
             }
+            
+            self.requestFirstChunkPizzeriasIfNeeded()
         }
     }
     
@@ -75,7 +103,30 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
     
     private func pizzeriasListDidUpdated()
     {
-        let response = PizzeriasList.FetchPizzerias.Response(result: PizzeriasResponse.success(result: pizzerias ?? []))
+        let response = PizzeriasList.FetchPizzerias.Response(result: PizzeriasResponse.success(result: pizzerias))
         self.presenter?.presentFetchedPizzerias(response: response)
+    }
+    
+    private func requestFirstChunkPizzeriasIfNeeded()
+    {
+        if pizzerias.isEmpty {
+            requestNextChunkPizzerias()
+        }
+    }
+    
+    ///Provides current user location if available, otherwise will provide default value
+    private func getLocation() -> CLLocationCoordinate2D
+    {
+        var loc: CLLocationCoordinate2D
+        
+        if location != nil {
+            loc = location!
+        }
+        else {
+            loc = locationDefault
+            presenter?.displayErrorMessage(errorMessage: Constants.Strings.locationUndefined)
+        }
+        
+        return loc
     }
 }

@@ -16,6 +16,7 @@
 		1D66BF541F27B399009AEFAC /* PizzeriaDetailsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF531F27B399009AEFAC /* PizzeriaDetailsCell.swift */; };
 		1D66BF561F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D66BF551F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift */; };
 		1D66BF591F27CE21009AEFAC /* centerOfNY.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 1D66BF581F27CE21009AEFAC /* centerOfNY.gpx */; };
+		1DB8DFFB1F27EDE700F0FD7F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB8DFFA1F27EDE700F0FD7F /* Location.swift */; };
 		1DBA928D1F25DA3C00F561C2 /* Pizzeria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA928C1F25DA3C00F561C2 /* Pizzeria.swift */; };
 		1DBA92911F25DB6500F561C2 /* ManagedPizzeria.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA92901F25DB6500F561C2 /* ManagedPizzeria.swift */; };
 		1DBA92931F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBA92921F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift */; };
@@ -51,6 +52,7 @@
 		1D66BF531F27B399009AEFAC /* PizzeriaDetailsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsCell.swift; sourceTree = "<group>"; };
 		1D66BF551F27BCFF009AEFAC /* PizzeriaDetailsRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PizzeriaDetailsRouter.swift; sourceTree = "<group>"; };
 		1D66BF581F27CE21009AEFAC /* centerOfNY.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = centerOfNY.gpx; sourceTree = "<group>"; };
+		1DB8DFFA1F27EDE700F0FD7F /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		1DBA928C1F25DA3C00F561C2 /* Pizzeria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pizzeria.swift; sourceTree = "<group>"; };
 		1DBA92901F25DB6500F561C2 /* ManagedPizzeria.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedPizzeria.swift; sourceTree = "<group>"; };
 		1DBA92921F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ManagedPizzerias+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -156,7 +158,6 @@
 				1DF41D9C1F253F0A00F74C9A /* Models */,
 				1DF41D711F24653700F74C9A /* AppDelegate.swift */,
 				1DF41D721F24653700F74C9A /* Extensions */,
-				1DF41D731F24653700F74C9A /* Externals */,
 				1DF41D741F24653700F74C9A /* Services */,
 			);
 			path = Common;
@@ -170,13 +171,6 @@
 				1DBA92A01F262B1400F561C2 /* UITableView+Reusable.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		1DF41D731F24653700F74C9A /* Externals */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Externals;
 			sourceTree = "<group>";
 		};
 		1DF41D741F24653700F74C9A /* Services */ = {
@@ -255,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				1DF41D9E1F253F7100F74C9A /* Pizzeria */,
+				1DB8DFFA1F27EDE700F0FD7F /* Location.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -418,6 +413,7 @@
 				1DF41D821F24653700F74C9A /* AppDelegate.swift in Sources */,
 				1DF41D971F253E5300F74C9A /* PizzeriasListCell.swift in Sources */,
 				1DBA92991F26102200F561C2 /* PizzeriasStoreProtocol.swift in Sources */,
+				1DB8DFFB1F27EDE700F0FD7F /* Location.swift in Sources */,
 				1DBA929B1F26168F00F561C2 /* PizzeriasResponse.swift in Sources */,
 				1DBA92A11F262B1400F561C2 /* UITableView+Reusable.swift in Sources */,
 				1DBA92931F25DB9C00F561C2 /* ManagedPizzerias+CoreDataProperties.swift in Sources */,

@@ -10,10 +10,10 @@ import Foundation
 import AFNetworking
 import SwiftyJSON
 import ObjectMapper
-import CoreLocation
 
 class PizzeriasNetworkProvider
 {
+    //MARK: - Inner structs
     struct Parameters
     {
         private init() {}
@@ -22,7 +22,6 @@ class PizzeriasNetworkProvider
         internal static let clientId = "Z41AFEJHN1MBGJYFBL0OGH4PWEZWSLV4MJZMHDR5KDYEWNAJ"
         internal static let clientSecret = "YLSEZM2JFSKHOCSCUGVQCUGQFQYB0CRW54LMGG42UKKQJPO0"
         internal static let version = "20170720"
-        internal static let limit = "10"
         internal static let categoryIdPizza = "4bf58dd8d48988d1ca941735"
     }
     
@@ -54,12 +53,15 @@ class PizzeriasNetworkProvider
         }
     }
     
+    //MARK: - Properties
     
     private let manager = AFHTTPSessionManager()
     
-    //MARK: - 
     
-    func fetchChunkPizzerias(location: CLLocationCoordinate2D,
+    //MARK: - Networking
+    
+    func fetchChunkPizzerias(location: Location,
+                             chunkLimit: Int,
                              withOffset offset: Int,
                              completionHandler: @escaping (PizzeriasResponse<[Pizzeria]>) -> Void)
     {
@@ -70,7 +72,7 @@ class PizzeriasNetworkProvider
                           Keys.Request.clientSecret: Parameters.clientSecret,
                           Keys.Request.version: Parameters.version,
                           Keys.Request.categoryId: Parameters.categoryIdPizza,
-                          Keys.Request.limit: Parameters.limit,
+                          Keys.Request.limit: String(chunkLimit),
                           Keys.Request.offset: String(offset)]
         
         manager.get(Parameters.urlString,

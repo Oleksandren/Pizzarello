@@ -13,14 +13,14 @@ class LocationManager: NSObject
 {
     static let shared = LocationManager()
     fileprivate let manager = CLLocationManager()
-    var location: CLLocationCoordinate2D? {
+    var location: Location? {
         didSet {
             if let loc = location {
                 locationDidUpdated?(loc)
             }
         }
     }
-    var locationDidUpdated: ((_ location: CLLocationCoordinate2D) -> Void)?
+    var locationDidUpdated: ((_ location: Location) -> Void)?
     
     //MARK: - Object lifecycle
     
@@ -50,7 +50,12 @@ extension LocationManager: CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager,
                          didUpdateLocations locations: [CLLocation])
     {
-        location = locations.first?.coordinate
+        if let loc = locations.first?.coordinate {
+            location = Location(loc)
+        }
+        else {
+            location = nil
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)

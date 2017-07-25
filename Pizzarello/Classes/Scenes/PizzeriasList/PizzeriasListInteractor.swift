@@ -11,7 +11,6 @@
 //
 
 import UIKit
-import CoreLocation
 
 protocol PizzeriasListBusinessLogic
 {
@@ -26,6 +25,19 @@ protocol PizzeriasListDataStore
 
 class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStore
 {
+    //MARK: - Inner structs
+    
+    struct DefaultValues
+    {
+        private init() {}
+        
+        internal static let chunkLimit = 10
+        internal static let locationDefault = Location(latitude: 40.89498884760200,
+                                                       longitude: -73.9933415680849)
+    }
+    
+    //MARK: - Properties
+    
     var presenter: PizzeriasListPresentationLogic?
     var pizzerias: [Pizzeria] = [] {
         didSet {
@@ -38,11 +50,16 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
     private var allPizzeriasDidReceived = false {
         didSet { if allPizzeriasDidReceived { presenter?.allPizzeriasDidReceived() } }
     }
-    private var location: CLLocationCoordinate2D?
-    private let locationDefault = CLLocationCoordinate2D(latitude: 40.89498884760200,
-                                                         longitude: -73.9933415680849)
+    private var pizzeriasChunkOffset = 0
+    private var location: Location? {
+        didSet { pizzeriasChunkOffset = 0 }
+    }
+    private var isuserAlreadyInformedAboutUsingDefaultLocation = false
     
-    init() {
+    //MARK: - Object lifecycle
+    
+    init()
+    {
         location = LocationManager.shared.location
         LocationManager.shared.locationDidUpdated = { location in
             self.location = location
@@ -63,7 +80,8 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
         requestNextChunkPizzeriasInProcess = true
         
         networkProvider.fetchChunkPizzerias(location: getLocation(),
-                                            withOffset: pizzerias.count) { result in
+                                            chunkLimit: DefaultValues.chunkLimit,
+                                            withOffset: pizzeriasChunkOffset) { result in
             self.requestNextChunkPizzeriasInProcess = false
             
             switch result {
@@ -76,6 +94,7 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
                     self.allPizzeriasDidReceived = true
                 }
                 else {
+                    self.increaseChunkOffset()
                     self.store.createPizzerias(pizzeriasToCreate: pizzerias,
                                                completionHandler: { _ in })
                 }
@@ -114,19 +133,29 @@ class PizzeriasListInteractor: PizzeriasListBusinessLogic, PizzeriasListDataStor
         }
     }
     
-    ///Provides current user location if available, otherwise will provide default value
-    private func getLocation() -> CLLocationCoordinate2D
+    private func increaseChunkOffset()
     {
-        var loc: CLLocationCoordinate2D
-        
-        if location != nil {
-            loc = location!
-        }
+        pizzeriasChunkOffset += DefaultValues.chunkLimit
+    }
+    
+    /**
+     * Provides current user location if available, otherwise will provide default value
+     */
+    private func getLocation() -> Location
+    {
+        if location != nil { return location! }
         else {
-            loc = locationDefault
-            presenter?.displayErrorMessage(errorMessage: Constants.Strings.locationUndefined)
+            informUserAboutUsingDefaultLocation()
+            
+            return DefaultValues.locationDefault
         }
-        
-        return loc
+    }
+    
+    private func informUserAboutUsingDefaultLocation()
+    {
+        guard !isuserAlreadyInformedAboutUsingDefaultLocation else { return }
+    
+        isuserAlreadyInformedAboutUsingDefaultLocation = true
+        presenter?.displayErrorMessage(errorMessage: Constants.Strings.locationUndefined)
     }
 }
